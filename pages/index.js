@@ -1,12 +1,24 @@
 import Head from 'next/head'
+import Sidebar from '../components/chats/Sidebar'
+import Layout from "../components/Layout";
+import styled from "styled-components";
 
-export default function Home() {
-  return (
-    <div>
-      <Head>
-        <title>Home Page</title>
-        <link rel="icon" href="/messenger.ico" />
-      </Head>
-    </div>
-  )
+const ChatsStyled = styled.div`
+  display: grid;
+  grid-template-columns: auto 1fr 2fr;
+`
+
+export default function Chats() {
+    return (
+        <Layout>
+            <Head>
+                <title>Chats</title>
+                <link rel="icon" href="/messenger.ico"/>
+            </Head>
+
+            <ChatsStyled>
+                <Sidebar/>
+            </ChatsStyled>
+        </Layout>
+    )
 }
