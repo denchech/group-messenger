@@ -4,9 +4,9 @@ import Image from 'next/image';
 import PropTypes from 'prop-types';
 import {SidebarWidth} from './constants';
 
-const SidebarButtonStyled = styled.div`
+export const SidebarButtonStyled = styled.button`
+  all: unset;
   border: 1px solid white;
-  width: ${SidebarWidth};
   height: ${SidebarWidth};
   display: flex;
   align-items: center;
@@ -22,14 +22,9 @@ const SidebarButtonStyled = styled.div`
 `
 
 export default class Button extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {isActive: props.isActive};
-    }
-
     render() {
         return (
-            <SidebarButtonStyled isActive={this.state.isActive} isLast={this.props.isLast}>
+            <SidebarButtonStyled onClick={this.props.handleClick} isActive={this.props.isActive} isLast={this.props.isLast}>
                 <Image src={this.props.image} width={"25px"} height={"25px"}/>
             </SidebarButtonStyled>
         )
@@ -39,7 +34,8 @@ export default class Button extends React.Component {
 Button.propTypes = {
     isActive: PropTypes.bool,
     isLast: PropTypes.bool,
-    image: PropTypes.string.isRequired
+    image: PropTypes.string.isRequired,
+    handleClick: PropTypes.func
 }
 
 Button.defaultProps = {

@@ -1,5 +1,6 @@
 import Head from 'next/head'
 import Sidebar from '../components/chats/Sidebar'
+import ChatsNavigation from '../components/chats/ChatsNavigation'
 import Layout from "../components/Layout";
 import styled from "styled-components";
 
@@ -17,7 +18,8 @@ export default function Chats() {
             </Head>
 
             <ChatsStyled>
-                <Sidebar/>
+                <Sidebar key={"sidebar"}/>
+                <ChatsNavigation key={"chatsNavigation"}/>
             </ChatsStyled>
         </Layout>
     )
