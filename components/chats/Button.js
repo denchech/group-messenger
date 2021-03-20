@@ -13,6 +13,7 @@ export const SidebarButtonStyled = styled.button`
   justify-content: center;
   background-color: ${props => props.isActive ? "gray" : "inherit"};
   margin-top: ${props => props.isLast ? "auto" : "0"};
+  transition: background-color 500ms;
 
   :hover {
     background-color: gray;

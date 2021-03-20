@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 
 const StarStyled = styled.svg`
   fill: ${(props => props.isActive ? "white" : "black")};
+  transition: fill 500ms;
 
   :hover {
     fill: white;
@@ -19,13 +20,11 @@ export default class Star extends React.Component {
     constructor(props) {
         super(props);
         this.state = {isActive: props.isActive};
-
-        this.handleClick = this.handleClick.bind(this);
     }
 
     render() {
         return (
-            <StarStyled isActive={this.state.isActive} onClick={this.handleClick}
+            <StarStyled isActive={this.props.isActive} onClick={this.props.handleClick}
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24" fill="black"
                         width="36px" height="36px">
@@ -35,14 +34,11 @@ export default class Star extends React.Component {
             </StarStyled>
         );
     }
-
-    handleClick() {
-        this.setState((state) => ({isActive: !state.isActive}));
-    }
 }
 
 Star.propTypes = {
-    isActive: PropTypes.bool
+    isActive: PropTypes.bool,
+    handleClick: PropTypes.func.isRequired
 };
 
 Star.defaultProps = {

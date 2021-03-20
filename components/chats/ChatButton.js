@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import Star from "./Star";
+import Star from "./icons/Star";
 
 
 const ChatButtonContainerStyled = styled.div`
@@ -21,6 +21,7 @@ const ChatButtonStyled = styled.button`
   text-align: center;
   height: 100%;
   background-color: ${(props => props.isActive ? "#383838" : "inherit")};
+  transition: background-color 500ms;
 
   :hover {
     background-color: #383838;
@@ -34,6 +35,7 @@ export default class ChatButton extends React.Component {
         super(props);
 
         this.handleClick = this.handleClick.bind(this);
+        this.handleFavoriteClick = this.handleFavoriteClick.bind(this);
     }
 
     render() {
@@ -42,7 +44,7 @@ export default class ChatButton extends React.Component {
                 <ChatButtonStyled onClick={this.handleClick} isActive={this.props.isActive}>
                     {this.props.name}
                 </ChatButtonStyled>
-                <Star/>
+                <Star isActive={this.props.isFavorite} handleClick={this.handleFavoriteClick}/>
             </ChatButtonContainerStyled>
         )
     }
@@ -50,14 +52,20 @@ export default class ChatButton extends React.Component {
     handleClick() {
         this.props.handleClick(this.props.id);
     }
+
+    handleFavoriteClick() {
+        this.props.handleFavoriteClick(this.props.id);
+    }
 }
 
 ChatButton.propTypes = {
     name: PropTypes.string.isRequired,
     isActive: PropTypes.bool,
+    isFavorite: PropTypes.bool.isRequired,
     key: PropTypes.number,
     id: PropTypes.number.isRequired,
     handleClick: PropTypes.func.isRequired,
+    handleFavoriteClick: PropTypes.func.isRequired
 }
 
 ChatButton.defaultProps = {

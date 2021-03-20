@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import ChatButton from "./ChatButton";
 
 
@@ -25,7 +26,7 @@ export default class ChatsNavigation extends React.Component {
             chats: []
         };
 
-        this.handleChatButtonClick = this.handleChatButtonClick.bind(this);
+        this.handleFavoriteClick = this.handleFavoriteClick.bind(this);
     }
 
     render() {
@@ -44,26 +45,49 @@ export default class ChatsNavigation extends React.Component {
     getChats() {
         const chats = [];
 
+        let isFavorite;
+        let index;
         for (let i = 0; i < this.chatsCount; ++i) {
-            chats.push({id: i, name: "Chat large super number" + i})
+            isFavorite = Math.random() < 0.5;
+            index = i;
+            chats[index] = {id: i.toString(), name: "Chat number " + i, isFavorite: isFavorite};
         }
 
         return chats;
     }
 
     renderChats() {
-        const {chats, activeChatId} = this.state;
-        return chats.map((chat) => (
+        const {chats} = this.state;
+        const {activeChatId, showFavorite} = this.props;
+
+        const displayedChats = showFavorite ? chats.filter((chat) => chat.isFavorite || chat.id === activeChatId) : chats;
+
+        return displayedChats.map((chat) => (
             <ChatButton key={chat.id}
                         id={chat.id}
                         isActive={chat.id === activeChatId}
-                        handleClick={this.handleChatButtonClick}
+                        handleClick={this.props.handleChatButtonClick}
                         name={chat.name}
+                        isFavorite={chat.isFavorite}
+                        handleFavoriteClick={this.handleFavoriteClick}
             />
         ));
     }
 
-    handleChatButtonClick(chatId) {
-        this.setState({activeChatId: chatId});
+    handleFavoriteClick(chatId) {
+        const {chats} = this.state;
+
+        chats[chatId].isFavorite = !chats[chatId].isFavorite;
+
+        this.setState({chats: chats});
     }
 }
+
+ChatsNavigation.propTypes = {
+    handleChatButtonClick: PropTypes.func.isRequired,
+    activeChatId: PropTypes.oneOf([
+        null,
+        PropTypes.string
+    ]).isRequired,
+    showFavorite: PropTypes.bool.isRequired
+};
