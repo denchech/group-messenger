@@ -1,9 +1,9 @@
 import React, {useState, useMemo} from "react";
 import styled from "styled-components";
-import Sidebar from './Sidebar';
-import ChatsNavigation from './ChatsNavigation';
-import Chat from "./Chat";
-import EmptyChat from "./EmptyChat";
+import Sidebar from './sidebar/Sidebar';
+import ChatsNavigation from './chat-navigation/ChatsNavigation';
+import Chat from "./chat/Chat";
+import EmptyChat from "./chat/EmptyChat";
 
 const ChatPageStyled = styled.div`
   display: grid;

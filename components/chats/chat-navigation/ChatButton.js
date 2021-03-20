@@ -1,17 +1,25 @@
 import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import Star from "./icons/Star";
+import Star from "./Star";
 
 
 const ChatButtonContainerStyled = styled.div`
   display: grid;
   grid-template-columns: 1fr auto;
   align-items: center;
-  background-color: #2d2d2d;
+  background-color: ${(props => props.isActive ? "#414141" : "#2d2d2d")};
   min-height: 15%;
   width: available;
   border: 1px solid white;
+
+  transition: background-color 500ms;
+
+
+  :hover {
+    background-color: #242424;
+    cursor: pointer;
+  }
 `;
 
 const ChatButtonStyled = styled.button`
@@ -20,14 +28,6 @@ const ChatButtonStyled = styled.button`
   color: white;
   text-align: center;
   height: 100%;
-  background-color: ${(props => props.isActive ? "#383838" : "inherit")};
-  transition: background-color 500ms;
-
-  :hover {
-    background-color: #383838;
-    opacity: 100%;
-    cursor: pointer;
-  }
 `;
 
 export default class ChatButton extends React.Component {
@@ -40,8 +40,8 @@ export default class ChatButton extends React.Component {
 
     render() {
         return (
-            <ChatButtonContainerStyled>
-                <ChatButtonStyled onClick={this.handleClick} isActive={this.props.isActive}>
+            <ChatButtonContainerStyled isActive={this.props.isActive}>
+                <ChatButtonStyled onClick={this.handleClick}>
                     {this.props.name}
                 </ChatButtonStyled>
                 <Star isActive={this.props.isFavorite} handleClick={this.handleFavoriteClick}/>

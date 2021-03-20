@@ -19,6 +19,7 @@ StarStyled.propTypes = {
 export default class Star extends React.Component {
     constructor(props) {
         super(props);
+
         this.state = {isActive: props.isActive};
     }
 

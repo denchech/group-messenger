@@ -2,7 +2,7 @@ import React from "react"
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import Button from "./Button";
-import {SidebarWidth} from "./constants";
+import {SidebarWidth} from "../constants";
 
 const SidebarStyled = styled.div`
   display: flex;

@@ -2,7 +2,7 @@ import React from 'react'
 import styled from "styled-components";
 import Image from 'next/image';
 import PropTypes from 'prop-types';
-import {SidebarWidth} from './constants';
+import {SidebarWidth} from '../constants';
 
 export const SidebarButtonStyled = styled.button`
   all: unset;
