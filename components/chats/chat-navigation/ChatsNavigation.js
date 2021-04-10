@@ -2,6 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import ChatButton from "./ChatButton";
+import client from "../../../libs/client";
+import Router from "next/router";
 
 
 const ChatsStyled = styled.div`
@@ -11,7 +13,7 @@ const ChatsStyled = styled.div`
   overflow-y: scroll;
   display: flex;
   flex-direction: column;
-  
+
   ::-webkit-scrollbar {
     display: none;
   }
@@ -20,13 +22,18 @@ const ChatsStyled = styled.div`
 export default class ChatsNavigation extends React.Component {
     constructor(props) {
         super(props);
-        this.chatsCount = 10; // TODO: remove this
 
         this.state = {
-            chats: []
+            chats: [],
+            isLoaded: false
         };
 
         this.handleFavoriteClick = this.handleFavoriteClick.bind(this);
+        this.getChats = this.getChats.bind(this);
+    }
+
+    componentDidMount() {
+        this.getChats();
     }
 
     render() {
@@ -37,49 +44,75 @@ export default class ChatsNavigation extends React.Component {
         );
     }
 
-    componentDidMount() {
-        this.setState({chats: this.getChats()})
-    }
-
-    // TODO: replace on api call
-    getChats() {
-        const chats = [];
-
-        let isFavorite;
-        let index;
-        for (let i = 0; i < this.chatsCount; ++i) {
-            isFavorite = Math.random() < 0.5;
-            index = i;
-            chats[index] = {id: i.toString(), name: "Chat number " + i, isFavorite: isFavorite};
-        }
-
-        return chats;
-    }
-
     renderChats() {
-        const {chats} = this.state;
+        const {chats, isLoaded} = this.state;
         const {activeChatId, showFavorite} = this.props;
 
-        const displayedChats = showFavorite ? chats.filter((chat) => chat.isFavorite || chat.id === activeChatId) : chats;
+        if (!isLoaded) {
+            return
+        }
 
-        return displayedChats.map((chat) => (
-            <ChatButton key={chat.id}
-                        id={chat.id}
-                        isActive={chat.id === activeChatId}
-                        handleClick={this.props.handleChatButtonClick}
-                        name={chat.name}
-                        isFavorite={chat.isFavorite}
-                        handleFavoriteClick={this.handleFavoriteClick}
-            />
-        ));
+        const chatKeys = Object.keys(chats);
+
+        const displayedChatKeys = showFavorite ? chatKeys.filter((key) => chats[key].isFavorite || chats[key].id === activeChatId) : chatKeys;
+
+        return displayedChatKeys.map((key) => {
+                let chat = chats[key];
+
+                return <ChatButton key={chat.id}
+                                   id={chat.id}
+                                   isActive={chat.id === activeChatId}
+                                   handleClick={this.props.handleChatButtonClick}
+                                   name={chat.name}
+                                   isFavorite={chat.isFavorite}
+                                   handleFavoriteClick={this.handleFavoriteClick}
+                />
+            }
+        );
+    }
+
+    getChats() {
+        client.all([
+            client.get('/api/chats'),
+            client.get('/api/favorite')
+        ])
+            .then(client.spread((chatResponse, favoriteResponse) => {
+                return [chatResponse.data, favoriteResponse.data];
+            }))
+            .then(client.spread((chats, favorite) => {
+                this.setState({
+                    isLoaded: true,
+                    chats: Object.assign({}, ...chats.map((chat) => {
+                        chat.isFavorite = favorite.chats.includes(chat.id)
+                        return {
+                            [chat.id]: chat
+                        }
+                    }))
+                })
+            }))
+            .catch((error) => {
+                switch (error.response.status) {
+                    case 403:
+                        if (process.browser) {
+                            Router.push('/login');
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            });
     }
 
     handleFavoriteClick(chatId) {
         const {chats} = this.state;
 
-        chats[chatId].isFavorite = !chats[chatId].isFavorite;
-
-        this.setState({chats: chats});
+        client.put("/api/favorite/" + chatId)
+            .then((response) => response.data.chat)
+            .then((chat) => {
+                chats[chat.id].isFavorite = chat.isFavorite;
+                this.setState({chats: chats});
+            })
+            .catch((error) => console.log(error))
     }
 }
 

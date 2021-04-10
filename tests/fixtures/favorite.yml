@@ -1,0 +1,6 @@
+entity: favorite
+connectedFields: ['user', 'chat']
+items:
+  favorite{1..10}:
+    user: '@user($current)'
+    chat: '@chat*'

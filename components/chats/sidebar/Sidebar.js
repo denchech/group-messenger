@@ -19,9 +19,15 @@ export default class Sidebar extends React.Component {
                 <Button image={"/person.ico"}/>
                 <Button image={"/star.ico"} isActive={this.props.isFavorite} handleClick={this.props.handleButtonClick}/>
                 <Button image={"/group_add.ico"}/>
-                <Button image={"/logout.ico"} isLast={true}/>
+                <Button image={"/logout.ico"} isLast={true} handleClick={this.logout}/>
             </SidebarStyled>
         )
+    }
+
+    logout() {
+        if (process.browser) {
+            window.location.href = '/logout';
+        }
     }
 }
 

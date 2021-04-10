@@ -1,0 +1,6 @@
+entity: user
+items:
+  user{1..10}:
+    name: '{{internet.userName}}'
+    password: '$2a$10$aZkri4ptr7MCxQfsK8AV3e0TZ8FyMiArelJgxRq3VHRwnEc8tGL.2'
+

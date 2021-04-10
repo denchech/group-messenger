@@ -3,6 +3,7 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 import ChatForm from "./ChatForm";
 import Message from "./Message";
+import client from "../../../libs/client";
 
 const ChatContainerStyled = styled.div`
   display: grid;
@@ -30,16 +31,27 @@ const ChatStyled = styled(ChatBackgroundStyled)`
 
 
 export default class Chat extends React.Component {
+    chatContainerRef = React.createRef();
+
     constructor(props) {
         super(props);
 
+        this.state = {
+            messages: [],
+            isLoaded: false
+        };
+
         this.handleSendMessage = this.handleSendMessage.bind(this);
+        this.renderMessages = this.renderMessages.bind(this);
+        this.getMessages = this.getMessages.bind(this);
+        this.renderChatContainer = this.renderChatContainer.bind(this);
     }
 
     render() {
         return (
             <ChatContainerStyled>
                 <ChatStyled>
+                    <div ref={this.chatContainerRef}/>
                     {this.renderMessages()}
                 </ChatStyled>
                 <ChatForm handleSubmit={this.handleSendMessage}/>
@@ -47,36 +59,85 @@ export default class Chat extends React.Component {
         )
     }
 
-    renderMessages() {
-        const {messages} = this.props;
+    componentDidMount() {
+        this.renderChatContainer()
+    }
 
-        return messages.map((message) => (
-            <Message text={message.text} isMine={message.isMine} name={message.createdBy.name}/>
-            )
-        );
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevProps.chatId !== this.props.chatId) {
+            this.renderChatContainer();
+        }
+    }
+
+    renderChatContainer() {
+        this.getMessages();
+        this.chatContainerRef?.current.scrollIntoView();
+        console.log(!!this.chatContainerRef);
+    }
+
+    renderMessages() {
+        const {messages, isLoaded} = this.state;
+
+        if (isLoaded) {
+            return messages.map((message) => (
+                    <Message key={message.id} text={message.text} isMine={message.isMine} name={message.author.name}/>
+                )
+            );
+        }
     }
 
     handleSendMessage(messageText) {
-        const {messages} = this.props;
+        const {messages} = this.state;
 
-        // TODO: add API call
-        const message = {id: messages.length + 1, text: messageText, isMine: true, createdBy: {name: "user0"}};
-        messages.unshift(message)
+        client.all([
+            client.post('/api/chats/' + this.props.chatId + '/messages', {text: messageText}),
+            client.get('/api/users'),
+        ])
+            .then(client.spread((messageResponse, userResponse) => {
+                return [messageResponse.data, userResponse.data];
+            }))
+            .then(
+                client.spread((message, user) => {
+                    message.isMine = message.author.id === user.id;
+                    messages.unshift(message)
 
-        this.setState({messages: messages});
+                    this.setState({messages: messages});
+                })
+            )
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+
+    getMessages() {
+        client.all([
+            client.get('/api/chats/' + this.props.chatId + '/messages'),
+            client.get('/api/users'),
+        ])
+            .then(client.spread((messageResponse, userResponse) => {
+                return [messageResponse.data, userResponse.data];
+            }))
+            .then(
+                client.spread((messages, user) => {
+
+                    this.setState({
+                        isLoaded: true,
+                        messages: messages.map((message) => {
+                            message.isMine = message.author.id === user.id;
+
+                            return message;
+                        })
+                    });
+                })
+            )
+            .catch((error) => {
+                console.log(error);
+            })
+        ;
     }
 
 }
 
 Chat.propTypes = {
-    messages: PropTypes.arrayOf(
-        PropTypes.shape({
-            id: PropTypes.string.isRequired,
-            text: PropTypes.string.isRequired,
-            isMine: PropTypes.bool.isRequired,
-            createdBy: PropTypes.shape({
-                name: PropTypes.string.isRequired
-            }).isRequired
-        })
-    ).isRequired
+    chatId: PropTypes.string.isRequired
 };
