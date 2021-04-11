@@ -1,0 +1,7 @@
+entity: apiToken
+connectedFields: ['user']
+processor: ./processor/ApiTokenProcessor
+items:
+  apiToken{1..10}:
+    user: '@user($current)'
+

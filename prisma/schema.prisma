@@ -1,0 +1,51 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        String      @id @default(uuid())
+  name      String      @unique
+  password  String
+  apiToken  ApiToken?
+  messages  Message[]
+  favorite  Favorite[]
+}
+
+model ApiToken {
+  id        String      @id @default(uuid())
+  user      User        @relation(fields: [userId], references: [id])
+  userId    String      @unique
+  token     String      @unique
+  @@map(name: "api_token")
+}
+
+model Chat {
+  id        String      @id @default(uuid())
+  name      String      @unique
+  messages  Message[]
+  createdAt DateTime    @default(now())
+  favorite  Favorite[]
+}
+
+model Favorite {
+  user      User    @relation(fields: [userId], references: [id])
+  userId    String
+  chat      Chat    @relation(fields: [chatId], references: [id])
+  chatId    String
+  @@id([userId, chatId])
+}
+
+model Message {
+  id         String      @id @default(uuid())
+  text       String      @db.Text()
+  createdAt  DateTime    @default(now())
+  author     User        @relation(fields: [authorId], references: [id])
+  authorId   String
+  chat       Chat        @relation(fields: [chatId], references: [id])
+  chatId     String
+}

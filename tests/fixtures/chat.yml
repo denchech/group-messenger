@@ -1,0 +1,4 @@
+entity: chat
+items:
+  chat{1..10}:
+    name: 'Chat number ($current)'

@@ -1,0 +1,7 @@
+entity: message
+connectedFields: ['author', 'chat']
+items:
+  message{1..100}:
+    text: '{{lorem.sentence}}'
+    author: '@user*'
+    chat: '@chat*'

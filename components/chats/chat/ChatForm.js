@@ -32,22 +32,33 @@ export default class ChatForm extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = {message: ''};
+        this.state = {message: ""};
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.renderSubmit = this.renderSubmit.bind(this);
     }
 
     render() {
         return (
             <ChatFormStyled onSubmit={this.handleSubmit}>
                 <ChatInput value={this.state.message} onChange={this.handleChange}/>
+                {this.renderSubmit()}
+            </ChatFormStyled>
+        );
+    }
+
+    renderSubmit() {
+        const {message} = this.state;
+
+        if (message !== "") {
+            return (
                 <ChatInputLabelStyled>
                     <input type="submit"/>
                     <Image src={"/send.ico"} width={"50px"} height={"50px"}/>
                 </ChatInputLabelStyled>
-            </ChatFormStyled>
-        );
+            );
+        }
     }
 
     handleSubmit(event) {
