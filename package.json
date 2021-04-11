@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "fixtures": "prisma migrate reset -f && fixtures ./tests/fixtures"
+    "fixtures": "prisma migrate reset -f && fixtures ./tests/fixtures",
+    "prod": "npm run build && npm run start"
   },
   "dependencies": {
     "@prisma/client": "^2.19.0",
