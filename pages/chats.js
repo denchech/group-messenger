@@ -33,7 +33,7 @@ export default function Chats(props) {
     );
 
     function renderChat() {
-        return activeChatId ? <Chat chatId={activeChatId}/> : <EmptyChat/>;
+        return activeChatId ? <Chat token={props.token} chatId={activeChatId}/> : <EmptyChat/>;
     }
 
     function handleChatButtonClick(chatId) {

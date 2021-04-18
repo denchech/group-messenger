@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import ChatForm from "./ChatForm";
 import Message from "./Message";
 import client from "../../../libs/client";
+import io from "socket.io-client";
 
 const ChatContainerStyled = styled.div`
   display: grid;
@@ -60,19 +61,44 @@ export default class Chat extends React.Component {
     }
 
     componentDidMount() {
-        this.renderChatContainer()
+        this.renderChatContainer();
+
+        this.socket = io(process.env.HOST, {
+            query: {
+                chatId: this.props.chatId
+            }
+        });
+
+        this.socket.on('connect_failed', (err) => {
+            console.log("Socket error: ", err);
+        });
+
+        this.socket.on("message.created", async (message) => {
+            const user = (await client.get("/api/users")).data;
+
+            const {messages} = this.state;
+            message.isMine = message.author.id === user.id;
+            messages.unshift(message);
+
+            this.setState({messages: messages});
+        });
+    }
+
+    componentWillUnmount() {
+        this.socket.disconnect();
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        if (prevProps.chatId !== this.props.chatId) {
+        const {chatId} = this.props;
+        if (prevProps.chatId !== chatId) {
             this.renderChatContainer();
+            this.socket.emit("chat.join", chatId);
         }
     }
 
     renderChatContainer() {
         this.getMessages();
         this.chatContainerRef?.current.scrollIntoView();
-        console.log(!!this.chatContainerRef);
     }
 
     renderMessages() {
@@ -87,26 +113,7 @@ export default class Chat extends React.Component {
     }
 
     handleSendMessage(messageText) {
-        const {messages} = this.state;
-
-        client.all([
-            client.post('/api/chats/' + this.props.chatId + '/messages', {text: messageText}),
-            client.get('/api/users'),
-        ])
-            .then(client.spread((messageResponse, userResponse) => {
-                return [messageResponse.data, userResponse.data];
-            }))
-            .then(
-                client.spread((message, user) => {
-                    message.isMine = message.author.id === user.id;
-                    messages.unshift(message)
-
-                    this.setState({messages: messages});
-                })
-            )
-            .catch((error) => {
-                console.log(error);
-            });
+        this.socket.emit("message.create", {text: messageText, chat: this.props.chatId});
     }
 
     getMessages() {
@@ -139,5 +146,6 @@ export default class Chat extends React.Component {
 }
 
 Chat.propTypes = {
-    chatId: PropTypes.string.isRequired
+    chatId: PropTypes.string.isRequired,
+    token: PropTypes.string
 };

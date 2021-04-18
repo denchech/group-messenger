@@ -19,7 +19,7 @@ const InputStyled = styled.input`
   border-color: transparent;
   text-align: left;
   margin-bottom: 10px;
-  
+
   &:focus {
     outline: none;
     border-color: gray;
@@ -36,7 +36,7 @@ const LoginButtonStyled = styled.input.attrs({type: "submit"})`
   text-align: center;
   padding: 10px;
   margin-top: 20px;
-  
+
   font-weight: bold;
 `;
 
@@ -53,9 +53,11 @@ export default function LoginForm(props) {
         <LoginFormStyled onSubmit={handleSubmitButton}>
             <h2>Sign in</h2>
             {renderError("username", error.username)}
-            <InputStyled id="username" type="text" placeholder="Username" value={username} onChange={handleInputChange(setUsername)}/>
+            <InputStyled id="username" type="text" placeholder="Username" value={username}
+                         onChange={handleInputChange(setUsername)}/>
             {renderError("password", error.password)}
-            <InputStyled id="password" type="password" placeholder="Password" value={password} onChange={handleInputChange(setPassword)}/>
+            <InputStyled id="password" type="password" placeholder="Password" value={password}
+                         onChange={handleInputChange(setPassword)}/>
             <LoginButtonStyled value={"Log in"}/>
         </LoginFormStyled>
     );
@@ -82,9 +84,7 @@ export default function LoginForm(props) {
                 }
             )
             .catch(error => {
-                if (error.response.status < 500) {
-                    setError({[error.response.data.path ?? 'username']: error.response.data.error});
-                }
+                setError({[error.response.data.path ?? 'username']: error.response.data.error});
             });
     }
 }

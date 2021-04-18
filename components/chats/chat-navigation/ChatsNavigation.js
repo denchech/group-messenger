@@ -118,9 +118,6 @@ export default class ChatsNavigation extends React.Component {
 
 ChatsNavigation.propTypes = {
     handleChatButtonClick: PropTypes.func.isRequired,
-    activeChatId: PropTypes.oneOf([
-        null,
-        PropTypes.string
-    ]).isRequired,
+    activeChatId: PropTypes.string,
     showFavorite: PropTypes.bool.isRequired
 };
