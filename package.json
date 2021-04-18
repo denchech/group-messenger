@@ -17,7 +17,6 @@
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
     "next": "10.0.7",
-    "nookies": "^2.5.2",
     "prop-types": "^15.7.2",
     "react": "17.0.1",
     "react-dom": "17.0.1",

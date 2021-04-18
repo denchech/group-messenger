@@ -113,7 +113,7 @@ export default class Chat extends React.Component {
     }
 
     handleSendMessage(messageText) {
-        this.socket.emit("message.create", messageText);
+        this.socket.emit("message.create", {text: messageText, chat: this.props.chatId});
     }
 
     getMessages() {

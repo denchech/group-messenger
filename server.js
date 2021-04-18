@@ -42,8 +42,8 @@ io.on('connection', (socket) => {
         try {
             const message = await postMessageCollection({
                 userId: socket.request.user.id,
-                chatId: chat,
-                text: data
+                chatId: data.chat,
+                text: data.text
             });
 
             socket.in(chatRoom).emit('message.created', message);
