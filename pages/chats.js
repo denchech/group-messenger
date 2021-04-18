@@ -6,6 +6,7 @@ import Sidebar from "../components/chats/sidebar/Sidebar";
 import ChatsNavigation from "../components/chats/chat-navigation/ChatsNavigation";
 import Chat from "../components/chats/chat/Chat";
 import EmptyChat from "../components/chats/chat/EmptyChat";
+import nookies from "nookies";
 
 const ChatPageStyled = styled.div`
   display: grid;
@@ -33,7 +34,7 @@ export default function Chats(props) {
     );
 
     function renderChat() {
-        return activeChatId ? <Chat chatId={activeChatId}/> : <EmptyChat/>;
+        return activeChatId ? <Chat token={props.token} chatId={activeChatId}/> : <EmptyChat/>;
     }
 
     function handleChatButtonClick(chatId) {

@@ -2,8 +2,7 @@ import {findUser} from "../service/auth-usecase";
 import Cookies from "cookies"
 import Result from "../service/result";
 
-
-const authMiddleware = handler => {
+const authHttpMiddleware = handler => {
     return async (request, response) => {
         const cookies = new Cookies(request, response);
         const token = cookies.get('Authorization');
@@ -24,4 +23,4 @@ const authMiddleware = handler => {
     };
 }
 
-export default authMiddleware;
+export default authHttpMiddleware;

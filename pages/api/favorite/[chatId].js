@@ -1,5 +1,5 @@
 import Result from "../../../service/result";
-import authMiddleware from "../../../middleware/authMiddleware";
+import authHttpMiddleware from "../../../middleware/authHttpMiddleware";
 import {updateFavoriteCollection} from "../../../service/favorite-usecase";
 
 async function handler(request, response) {
@@ -19,4 +19,4 @@ async function handler(request, response) {
     response.status(result.code).json(result.data);
 }
 
-export default authMiddleware(handler)
+export default authHttpMiddleware(handler)

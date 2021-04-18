@@ -1,6 +1,6 @@
 import {getChatCollection} from "../../../service/chat-handler";
 import Result from "../../../service/result";
-import authMiddleware from "../../../middleware/authMiddleware";
+import authHttpMiddleware from "../../../middleware/authHttpMiddleware";
 
 async function handler(request, response) {
     const result = new Result();
@@ -17,4 +17,4 @@ async function handler(request, response) {
 
 }
 
-export default authMiddleware(handler);
+export default authHttpMiddleware(handler);
