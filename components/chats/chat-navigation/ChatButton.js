@@ -62,7 +62,6 @@ ChatButton.propTypes = {
     name: PropTypes.string.isRequired,
     isActive: PropTypes.bool,
     isFavorite: PropTypes.bool.isRequired,
-    key: PropTypes.string,
     id: PropTypes.string.isRequired,
     handleClick: PropTypes.func.isRequired,
     handleFavoriteClick: PropTypes.func.isRequired
