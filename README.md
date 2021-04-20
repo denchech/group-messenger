@@ -47,3 +47,7 @@ npm run start
 ### Favorite
 ![favorite](.github/favorite.png)
 
+### Demo
+![demo](.github/chat-demo.gif)
+
+
