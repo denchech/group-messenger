@@ -1,1 +1,1 @@
-export const SidebarWidth = "50px";
+export const SidebarWidth = '50px'

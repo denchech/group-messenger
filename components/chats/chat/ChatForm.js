@@ -1,7 +1,7 @@
-import React from "react";
-import styled from "styled-components";
-import Image from "next/image";
-import PropTypes from "prop-types";
+import React from 'react'
+import styled from 'styled-components'
+import Image from 'next/image'
+import PropTypes from 'prop-types'
 
 const ChatFormStyled = styled.form`
   display: grid;
@@ -12,12 +12,12 @@ const ChatFormStyled = styled.form`
   & input[type="submit"] {
     display: none;
   }
-`;
+`
 
 const ChatInput = styled.textarea`
   all: unset;
   height: 100%;
-`;
+`
 
 const ChatInputLabelStyled = styled.label`
   display: flex;
@@ -26,52 +26,52 @@ const ChatInputLabelStyled = styled.label`
   :hover {
     cursor: pointer;
   }
-`;
+`
 
 export default class ChatForm extends React.Component {
-    constructor(props) {
-        super(props);
+  constructor (props) {
+    super(props)
 
-        this.state = {message: ""};
+    this.state = { message: '' }
 
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.renderSubmit = this.renderSubmit.bind(this);
+    this.handleChange = this.handleChange.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
+    this.renderSubmit = this.renderSubmit.bind(this)
+  }
+
+  render () {
+    return (
+      <ChatFormStyled onSubmit={this.handleSubmit}>
+        <ChatInput value={this.state.message} onChange={this.handleChange} />
+        {this.renderSubmit()}
+      </ChatFormStyled>
+    )
+  }
+
+  renderSubmit () {
+    const { message } = this.state
+
+    if (message !== '') {
+      return (
+        <ChatInputLabelStyled>
+          <input type='submit' />
+          <Image src='/send.ico' width='50px' height='50px' />
+        </ChatInputLabelStyled>
+      )
     }
+  }
 
-    render() {
-        return (
-            <ChatFormStyled onSubmit={this.handleSubmit}>
-                <ChatInput value={this.state.message} onChange={this.handleChange}/>
-                {this.renderSubmit()}
-            </ChatFormStyled>
-        );
-    }
+  handleSubmit (event) {
+    event.preventDefault()
+    this.props.handleSubmit(this.state.message)
+    this.setState({ message: '' })
+  }
 
-    renderSubmit() {
-        const {message} = this.state;
-
-        if (message !== "") {
-            return (
-                <ChatInputLabelStyled>
-                    <input type="submit"/>
-                    <Image src={"/send.ico"} width={"50px"} height={"50px"}/>
-                </ChatInputLabelStyled>
-            );
-        }
-    }
-
-    handleSubmit(event) {
-        event.preventDefault();
-        this.props.handleSubmit(this.state.message)
-        this.setState({message: ''});
-    }
-
-    handleChange(event) {
-        this.setState({message: event.target.value});
-    }
+  handleChange (event) {
+    this.setState({ message: event.target.value })
+  }
 }
 
 ChatForm.propTypes = {
-    handleSubmit: PropTypes.func.isRequired
+  handleSubmit: PropTypes.func.isRequired
 }
