@@ -2,12 +2,12 @@ import Layout from "../components/Layout";
 import Head from "next/head";
 import React from "react";
 import styled from "styled-components";
-import LoginForm from "../components/LoginForm";
 import client from "../libs/client";
 import Router from "next/router";
+import LoginForm from "../components/chats/auth/LoginForm";
 
 
-const LoginPageStyled = styled.div`
+export const LoginPageStyled = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -18,7 +18,6 @@ const LoginPageStyled = styled.div`
 
 
 export default class Login extends React.Component {
-
     componentDidMount() {
         this.getUser().then((response) => {
             if (response.data.user) {
