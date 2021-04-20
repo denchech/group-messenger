@@ -1,10 +1,10 @@
-import axios from "axios";
+import axios from 'axios'
 
 const client = axios.create({
-    baseURL: process.env.HOST
-});
+  baseURL: process.env.HOST
+})
 
 client.all = axios.all
 client.spread = axios.spread
 
-export default client;
+export default client
