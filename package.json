@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "migrate": "npx prisma migrate dev",
+    "migrate": "prisma migrate dev",
     "dev": "node server.js",
     "build": "next build",
     "start": "SET NODE_ENV=production & node server.js",
