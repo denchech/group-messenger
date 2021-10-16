@@ -20,6 +20,11 @@ git clone https://github.com/denchech/group-messenger.git
 npm install
 ```
 
+Execute migrations
+```bash
+npm run migrate
+```
+
 Run server in dev mode
 ```bash
 npm run dev
