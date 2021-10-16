@@ -22,7 +22,7 @@ npm install
 
 Execute migrations
 ```bash
-npm run migrate
+prisma migrate dev
 ```
 
 Run server in dev mode
