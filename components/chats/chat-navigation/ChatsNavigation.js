@@ -18,6 +18,13 @@ const ChatsStyled = styled.div`
   }
 `
 
+const SearchForm = styled.input`
+  min-height: 10%;
+  max-height: 10%;
+  width: 100%;
+  font-size: large;
+`
+
 export default class ChatsNavigation extends React.Component {
   constructor (props) {
     super(props)
@@ -29,18 +36,24 @@ export default class ChatsNavigation extends React.Component {
 
     this.handleFavoriteClick = this.handleFavoriteClick.bind(this)
     this.getChats = this.getChats.bind(this)
+    this.updatedSearch = this.updatedSearch.bind(this)
   }
 
   componentDidMount () {
-    this.getChats()
+    this.getChats("");
   }
 
   render () {
     return (
       <ChatsStyled>
+        <SearchForm onChange={this.updatedSearch}/>
         {this.renderChats()}
       </ChatsStyled>
     )
+  }
+
+  updatedSearch(event) {
+    this.getChats(event.target.value);
   }
 
   renderChats () {
@@ -73,9 +86,9 @@ export default class ChatsNavigation extends React.Component {
     )
   }
 
-  getChats () {
+  getChats (search) {
     client.all([
-      client.get('/api/chats'),
+      client.get(`/api/chats?search=${search}`),
       client.get('/api/favorite')
     ])
       .then(client.spread((chatResponse, favoriteResponse) => {

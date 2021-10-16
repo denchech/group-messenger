@@ -7,7 +7,7 @@ async function handler (request, response) {
 
   switch (request.method) {
     case 'GET':
-      await getChatCollection(result)
+      await getChatCollection({search: request.query.search}, result)
       break
     default:
       result.unsupported()
