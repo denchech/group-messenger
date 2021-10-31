@@ -7,7 +7,7 @@ const ChatButtonContainerStyled = styled.div`
   display: grid;
   grid-template-columns: 1fr auto;
   align-items: center;
-  background-color: ${props => props.isActive ? '#414141' : '#2d2d2d'};
+  background-color: ${props => props.isActive ? '#5c5c5c' : '#2d2d2d'};
   min-height: 15%;
   width: available;
   border: 1px solid white;

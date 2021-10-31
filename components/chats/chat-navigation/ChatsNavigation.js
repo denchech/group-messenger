@@ -12,6 +12,7 @@ const ChatsStyled = styled.div`
   overflow-y: scroll;
   display: flex;
   flex-direction: column;
+  margin-top: 15%;
 
   ::-webkit-scrollbar {
     display: none;
@@ -19,9 +20,11 @@ const ChatsStyled = styled.div`
 `
 
 const SearchForm = styled.input`
+  top: 0;
   min-height: 10%;
   max-height: 10%;
-  width: 100%;
+  width: calc(100%/3 - 24px);
+  position: fixed;
   font-size: large;
 `
 
